@@ -5,25 +5,313 @@
    font-family: "Roboto", sans-serif;
    margin: 0;
    padding: 0;
+   font-weight: 400;
    list-style: none;
+   text-decoration: none;
+}
+
+button {
+   border: none;
+   background: none;
 }
 
 :root {
-   --gray-0: rgb(241, 243, 244);
-   --gray-1: rgb(112, 117, 122);
-   --gray-2: rgb(60, 64, 52);
+   --gray-0: rgb(249, 249, 249);
+   --gray-1: rgb(241, 243, 244);
+   --gray-2: rgb(112, 117, 122);
+   --gray-3: rgb(60, 64, 67);
+   --gray-active: rgb(217, 219, 218);
    --blue: rgb(26, 115, 232);
    --border-color: rgb(218, 220, 224);
    --tomato: rgb(213, 0, 0);
    --peacock: rgb(3, 155, 229);
    --sage: rgb(51, 182, 121);
    --border-size: 1px;
-   --size-sm: 0.25rem;
-   --size-md: 0.5rem;
-   --size-l: 1rem;
-   --size-xl: 3rem;
-   --size-xxl: 3.5rem;
+   --size-xs: 0.25rem;
+   --size-s: 0.5rem;
+   --size-md: 1.5rem;
+   --size-l: 3rem;
+   --size-xl: 3.5rem;
+   --size-xxl: 4rem;
    --font-sm: 0.75rem;
-   --font-lg: 0.875rem;
+   --font-l: 0.875rem;
    --font-xl: 1.375rem;
+   --shadow-1: 0px 1px 2px 0px rgba(60, 64, 67, 0.3),
+      0px 1px 3px 1px rgba(60, 64, 67, 0.15);
+   --shadow-5: 0px 4px 4px 0px rgba(60, 64, 67, 0.3),
+      0px 8px 12px 6px rgba(60, 64, 67, 0.15);
+}
+
+/* sm = xs, md = s, l = md, xl = l, xxl = xl, xxxl = 3.5rem*/
+
+.sr-only {
+   visibility: hidden;
+   height: 0;
+   width: 0;
+   display: block;
+}
+
+#root {
+   height: 100vh;
+}
+
+.calendar-header {
+   padding: var(--size-s);
+   height: var(--size-xxl);
+   display: flex;
+   align-items: center;
+   border-bottom: var(--border-size) solid var(--border-color);
+}
+
+.calendar-title {
+   display: flex;
+   align-items: center;
+   margin-left: var(--size-xs);
+   margin-right: var(--size-xl);
+}
+
+.header-h1 {
+   font-size: var(--font-xl);
+}
+
+.calendar-icon {
+   order: -1;
+   margin-right: var(--size-s);
+   height: 32px;
+   width: 32px;
+   background-image: url("/ttcalendar.svg");
+   background-repeat: no-repeat;
+   background-position: center;
+}
+
+.header-date {
+   font-size: var(--font-xl);
+   order: 1;
+}
+
+.header-today-btn {
+   margin-right: var(--size-md);
+   font-size: var(--font-l);
+   padding: var(--size-s) 0.75rem;
+   border: var(--border-size) solid var(--border-color);
+   border-radius: var(--size-xs);
+   transition: background-color 100ms linear;
+}
+
+.header-today-btn:hover,
+.header-today-btn:focus {
+   background-color: var(--gray-0);
+}
+
+.header-today-btn:active {
+   background-color: var(--gray-active);
+}
+
+.header-chivrons {
+   display: flex;
+   gap: var(--size-xs);
+   margin-right: var(--size-md);
+}
+
+.chivron {
+   padding: 1rem;
+   cursor: pointer;
+   background-color: white;
+   border-radius: 50%;
+   background-image: url('data:image/svg+xml,<svg width="12" height="12" viewBox="0 0 12 18" fill="none" xmlns="http://www.w3.org/2000/svg" ><path d="M9.77818 0L11.8995 2.12132L3.08845 10.9324L0.967133 8.81104L9.77818 0Z" fill="%2364676B" /><path d="M0.831917 8.95324L2.95324 6.83192L11.9324 15.811L9.81104 17.9324L0.831917 8.95324Z" fill="%2364676B" /></svg>');
+   background-repeat: no-repeat;
+   background-position: center;
+   transition: background-color 100ms linear;
+}
+
+.chivron:hover,
+.chivron:focus {
+   background-color: var(--gray-0);
+}
+
+.chivron:active {
+   background-color: var(--gray-active);
+}
+
+.chivron-next-month-btn {
+   rotate: 180deg;
+}
+
+.calendar-main,
+.calendar-days-list {
+   height: 100%;
+}
+
+.calendar-add-event-btn {
+   position: absolute;
+   cursor: pointer;
+   left: var(--size-md);
+   width: var(--size-xl);
+   aspect-ratio: 1/1;
+   border-radius: 50%;
+   background-color: transparent;
+   box-shadow: var(--shadow-1);
+   transition: box-shadow 250ms ease-in-out, background-color 200ms;
+}
+
+.calendar-add-event-btn {
+   opacity: 1;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   place-self: center;
+}
+
+.calendar-add-event-btn:hover,
+.calendar-add-event-btn:focus {
+   background-color: rgba(255, 255, 255, 1);
+   box-shadow: var(--shadow-5);
+}
+
+.calendar-days-list {
+   margin: 0 var(--size-s);
+   display: grid;
+   grid-template-columns: repeat(7, minmax(0px, 1fr));
+   grid-auto-rows: minmax(100px, 1fr);
+   border-left: var(--border-size) solid var(--border-color);
+}
+
+.calendar-day {
+   overflow-y: hidden;
+   border-right: var(--border-size) solid var(--border-color);
+   border-bottom: var(--border-size) solid var(--border-color);
+}
+
+/* Overrides the date colour to a lighter grey on non-month days */
+.non-month-day h2 {
+   color: var(--gray-2);
+}
+
+.calendar-day h2 {
+   display: flex;
+   flex-direction: column;
+   margin: var(--size-s) 0;
+   /* gap: var(--size-s); */
+}
+
+.calendar-day h2 time {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   place-self: center;
+   border-radius: 50%;
+   height: var(--size-md);
+   /* min-width rather than width to avoid line breaks on 1st day of month */
+   min-width: var(--size-md);
+   /* Substitute padding for min-width to add extra width to the date on the first day of the month */
+   /* padding: 0 var(--size-s); */
+}
+
+.today h2 time {
+   color: white;
+   background-color: var(--blue);
+}
+
+/* Events */
+
+.day-events-list {
+   display: flex;
+   flex-direction: column;
+   max-height: 100%;
+   gap: var(--size-xs);
+}
+
+.event {
+   cursor: pointer;
+   display: flex;
+   align-items: center;
+   text-wrap: nowrap;
+   padding: var(--size-xs) 0;
+   margin-right: var(--size-s);
+   border-radius: var(--size-xs);
+   background-color: white;
+}
+
+.event * {
+   margin-left: var(--size-xs);
+}
+
+.all-day-event {
+   color: white;
+}
+
+.event:hover,
+.event:focus {
+   background-color: var(--gray-1);
+}
+
+.all-day-event:hover,
+.all-day-event:focus {
+   filter: brightness(90%) saturate(97%);
+}
+
+.event-desc {
+   overflow-x: hidden;
+}
+
+.event-desc time {
+   margin-right: var(--size-xs);
+}
+
+.circle-icon {
+   order: -1;
+   height: var(--size-s);
+   border-radius: 50%;
+   aspect-ratio: 1/1;
+}
+
+/* User selection overrides */
+
+.all-day-event,
+.circle-icon {
+   /* Specifies a default color when none are selected */
+   background-color: var(--sage);
+}
+
+.all-day-event.green,
+.circle-icon.green {
+   background-color: var(--sage);
+}
+
+.all-day-event.red,
+.circle-icon.red {
+   background-color: var(--tomato);
+}
+
+.all-day-event.blue,
+.circle-icon.blue {
+   background-color: var(--peacock);
+}
+
+/* Typography */
+.calendar-header,
+.calendar-main {
+   color: var(--gray-3);
+}
+
+.calendar-day h2,
+.event h3 {
+   font-size: var(--font-sm);
+}
+
+.calendar-day h2 abbr {
+   text-transform: uppercase;
+   color: var(--gray-2);
+}
+
+.calendar-day h2 {
+   text-align: center;
+}
+
+.calendar-day * {
+   font-weight: 500;
+}
+
+.calendar-day h3 time {
+   font-weight: 400;
 }
